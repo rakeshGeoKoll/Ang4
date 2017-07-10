@@ -1,0 +1,101 @@
+<h4 class="page-header">
+    Company Setup
+    <br>
+    <small>
+        <button *ngIf="isUserManager" (click)="addCompany()" id="company-setup-addcompany" class="btn btn-primary btn-xs" type="button"><i class="fa fa-plus" alt="add company"></i></button>
+        <span [innerHTML]="companySetupMenuHelpText"></span>
+    </small>
+</h4>
+
+<div *ngIf="showCompanyEditForm">
+    <form [formGroup]="valForm" class="form-validate mb-lg" role="form" name="companyForm" novalidate="" (submit)="submitForm($event, valForm.value)">
+        <fieldset>
+            <div class="form-group col-xs-12" formGroupName="companyGroup">
+                <div class="row mb-lg clearfix">
+                    <div class="col-md-3">
+                        <label for="company-setup-companyname">Company Name</label>
+                        <input class="form-control" id="company-setup-companyname" type="text" value='{{companyData[selectedRow].companyName}}' formControlName="companyName" [formControl]="valForm.controls.companyGroup.controls['companyName']" />
+                        <span class="text-danger" *ngIf="valForm.controls.companyGroup.controls['companyName'].hasError('required') && (valForm.controls.companyGroup.controls['companyName'].dirty || valForm.controls.companyGroup.controls['companyName'].touched)">This field is required</span>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="btn-group">
+                            <br>
+                            <button id="company-setup-save" type="submit" class="btn btn-default g btn-info" [disabled]="!valForm.valid">Save</button>
+                        </div>
+                        <div class="btn-group">
+                            <br>
+                            <button id="company-setup-cancel" type="button" class="btn btn-default" (click)="cancelForm()" ><i class="fa fa-close"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-lg clearfix">
+                    <div class="col-md-8">
+                        <label for="features">Features</label>
+                        <div id="features" >
+                            <div *ngFor="let feature of companyData[selectedRow].features">
+                                <div class="col-md-2">
+                                    <p class="checkbox">
+                                        <input id="feature-{{feature.name}}" type="checkbox" [checked]="feature.enabled" (change)="toggleFeature(feature)" />{{feature.name}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<div *ngIf="showCompanyAddForm">
+    <form [formGroup]="valForm" class="form-validate mb-lg" role="form" name="companyForm" novalidate="" (submit)="submitForm($event, valForm.value)">
+        <fieldset>
+            <div class="form-group col-md-12" formGroupName="companyGroup">
+                <div class="row mb-lg clearfix">
+                    <div class="col-md-3">
+                        <label for="company-setup-companyname">Company Name</label>
+                        <input class="form-control" id="company-setup-companyname" type="text" value='' formControlName="companyName" [formControl]="valForm.controls.companyGroup.controls['companyName']"/>
+                        <span class="text-danger" *ngIf="valForm.controls.companyGroup.controls['companyName'].hasError('required') && (valForm.controls.companyGroup.controls['companyName'].dirty || valForm.controls.companyGroup.controls['companyName'].touched)">This field is required</span>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="btn-group">
+                            <br>
+                            <button id="company-setup-save" type="submit" class="btn btn-default g btn-info" [disabled]="!valForm.valid">Save</button>
+                        </div>
+                        <div class="btn-group">
+                            <br>
+                            <button id="company-setup-cancel" type="button" class="btn btn-default" (click)="cancelForm()" ><i class="fa fa-close"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-lg clearfix">
+                    <div class="col-md-8">
+                        <label for="features">Features</label>
+                        <div id="features" >
+                            <div *ngFor="let feature of featureData">
+                                <div class="col-md-2">
+                                    <p class="checkbox">
+                                        <input id="feature-{{feature.name}}" type="checkbox" [checked]="feature.enabled" (change)="toggleFeature(feature)" />{{feature.name}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div *ngIf="! (showCompanyEditForm || showCompanyAddForm)" class="mb-lg clearfix">
+    <div class="wd-md">
+        <input *ngIf="config.filtering" placeholder="Filter all columns" [ngTableFiltering]="config.filtering" class="form-control" (tableChanged)="onChangeTable(config)" />
+    </div>
+</div>
+<div class="panel panel-default">
+    <ng-table [config]="config" (tableChanged)="onChangeTable(config)" (cellClicked)="onCellClick($event)" [rows]="rows" [columns]="columns" [id]="'id'">
+    </ng-table>
+</div>
+<div class="text-right">
+    <pagination *ngIf="config.paging" class="pagination-sm" [(ngModel)]="page" [totalItems]="length" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [boundaryLinks]="true" [rotate]="false" (pageChanged)="onChangeTable(config, $event)" (numPages)="numPages = $event">
+    </pagination>
+</div>

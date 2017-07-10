@@ -1,0 +1,10 @@
+$fa-var-angle-down: "\f107";
+$fa-var-angle-up: "\f106";
+
+// Fix anguarl-datatable sort icons
+.glyphicon-triangle-top:before {
+    content: $fa-var-angle-up !important;
+}
+.glyphicon-triangle-bottom:before {
+    content: $fa-var-angle-down !important;
+}

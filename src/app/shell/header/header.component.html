@@ -1,0 +1,103 @@
+<!-- START Top Navbar-->
+<nav class="navbar topnavbar" role="navigation">
+    <!-- START navbar header-->
+    <div class="navbar-header">
+        <a id="shellHeaderLogo" class="navbar-brand" href="#/">
+            <div class="brand-logo">
+                <img class="img-responsive" src="assets/img/geocomm-logo-main.png"  alt="App Logo" />
+            </div>
+            <div class="brand-logo-collapsed">
+                <img class="img-responsive" src="assets/img/geocomm-logo-small.png" alt="App Logo" />
+            </div>
+        </a>
+    </div>
+    <!-- END navbar header-->
+    <!-- START Nav wrapper-->
+    <div class="nav-wrapper">
+        <!-- START Left navbar-->
+        <ul class="nav navbar-nav">
+            <li>
+                <!-- Button used to collapse the left sidebar. Only visible on tablet and desktops-->
+                <a id="shellHeaderSidebarCollapseTabletDesktop" class="hidden-xs" trigger-resize="" (click)="toggleCollapsedSideabar()" *ngIf="!isCollapsedText()">
+                    <em class="fa fa-navicon"></em>
+                </a>
+                <!-- Button to show/hide the sidebar on mobile. Visible on mobile only.-->
+                <a id="shellHeaderSidebarCollapseMobile" class="visible-xs sidebar-toggle" (click)="settings.layout.asideToggled =! settings.layout.asideToggled">
+                    <em class="fa fa-navicon"></em>
+                </a>
+            </li>
+        </ul>
+        <!-- END Left navbar-->
+
+        <!-- START Right Navbar-->
+        <ul class="nav navbar-nav navbar-right">
+            <!-- Fullscreen (only desktops)-->
+            <li class="visible-lg">
+                <a #fsbutton (click)="toggleFullScreen($event)">
+                    <em class="fa fa-expand"></em>
+                </a>
+            </li>
+
+            <!-- START User menu-->
+            <li id="shellHeaderUserMenu" class="dropdown dropdown-list" dropdown>
+                <a dropdownToggle>
+                    <em class="icon-user"></em>
+                </a>
+                <!-- START Dropdown menu-->
+                <ul dropdownMenu class="dropdown-menu animated flipInX">
+                    <li>
+                        <!-- START list group-->
+                        <div class="list-group">
+                            <!-- list item-->
+                            <a id="shellHeaderUserMenuLogout" class="list-group-item" (click)="logout()">
+                                <div class="media-box">
+                                    <div class="pull-left">
+                                        <em class="fa icon-logout fa-2x text-danger"></em>
+                                    </div>
+                                    <div class="media-box-body clearfix">
+                                        <p class="m0">Log Out</p>
+                                        <p class="m0 text-muted">
+                                            <small>Log out of your current session</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- list item-->
+                            <!--CJA: This is not used... Removed for 1/16/2017 release...-->
+                            <!--<a id="shellHeaderUserMenuLock" class="list-group-item" (click)="lockscreen()">
+                                <div class="media-box">
+                                    <div class="pull-left">
+                                        <em class="fa icon-lock fa-2x text-warning"></em>
+                                    </div>
+                                    <div class="media-box-body clearfix">
+                                        <p class="m0">Lock Account</p>
+                                        <p class="m0 text-muted">
+                                            <small>Lock your session</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>-->
+                        </div>
+                        <!-- END list group-->
+                    </li>
+                </ul>
+                <!-- END Dropdown menu-->
+            </li>
+            <!-- END Alert menu-->
+            <!-- START Offsidebar button-->
+            <!--<li>
+                <a (click)="toggleOffsidebar()">
+                    <em class="icon-notebook"></em>
+                </a>
+            </li>-->
+            <!-- END Offsidebar menu-->
+        </ul>
+        <!-- END Right Navbar-->
+
+    </div>
+    <!-- END Nav wrapper-->
+
+    <app-navsearch [visible]="getNavSearchVisible()" (onclose)="setNavSearchVisible(false)"></app-navsearch>
+
+</nav>
+<!-- END Top Navbar-->

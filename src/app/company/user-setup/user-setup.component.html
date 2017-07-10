@@ -1,0 +1,103 @@
+<h4 class="page-header">User Setup
+    <br>
+    <small>
+      <button *ngIf="(isUserManager || isCompanyManager || isStoreManager)" (click)="addUser()" id="user-setup-adduser" class="btn btn-primary btn-xs" type="button"><i class="fa fa-plus"  alturnative="add a user"></i></button>       
+      <span [innerHTML]="userSetupMenuHelpText"></span>
+    </small>
+</h4>
+
+<div *ngIf="(showUserEditForm || showUserAddForm)"> 
+  <form [formGroup]="valForm" class="form-validate mb-lg" role="form" name="userForm" novalidate="" (submit)="submitForm($event, valForm.value)">
+  <fieldset>
+    <div class="form-group col-xs-9" >
+      <div class="row mb-lg clearfix">
+        <div class="col-xs-3">
+          <label for="user-setup-username">Username</label>
+          <input *ngIf="showUserEditForm" class="form-control" id="user-setup-username" type="text" disabled [value]="usernameSelected"/>
+          <input *ngIf="showUserAddForm" class="form-control" id="user-setup-username" type="text" [value]="usernameSelected" name="username" formControlName="username" [formControl]="valForm.controls['username']"/>
+          <span class="text-danger" *ngIf="valForm.controls['username'].hasError('pattern') && (valForm.controls['username'].dirty || valForm.controls['username'].touched)">Username is not a valid e-mail address!</span>
+        </div>
+        <div formGroupName="passwordGroup">
+          <div class="col-xs-2">
+            <label for="user-setup-password">Password</label>
+            <input class="form-control" id="user-setup-password" type="password" name="password" formControlName="password" [formControl]="valForm.controls.passwordGroup.controls['password']"/>               
+            <span class="text-danger" *ngIf="valForm.controls.passwordGroup.controls['password'].hasError('pattern') && (valForm.controls.passwordGroup.controls['password'].dirty || valForm.controls.passwordGroup.controls['password'].touched)">Passwords must be alpha-numeric and 6 to 12 characters long!</span>
+            <span class="text-danger" *ngIf="valForm.controls.passwordGroup.controls['password'].hasError('required') && (valForm.controls.passwordGroup.controls['password'].dirty || valForm.controls.passwordGroup.controls['password'].touched)">This field is required!</span>
+          </div>
+          <div class="col-xs-2">
+            <label for="user-setup-confirmPassword">Confirm Password</label>
+            <input class="form-control" id="user-setup-confirmPassword" type="password" name="confirmPassword" formControlName="confirmPassword" [formControl]="valForm.controls.passwordGroup.controls['confirmPassword']"/>
+            <span class="text-danger" *ngIf="valForm.controls.passwordGroup?.errors?.equalTo">Passwords do not match!</span>
+          </div>
+        </div>
+        <!--<user-setup-save-cancel *ngIf="showUserEditForm"></user-setup-save-cancel>-->
+        
+        <div *ngIf="showUserEditForm" class="col-md-2">
+          <div class="btn-group">
+            <br>
+            <button id="user-setup-save" type="submit" class="btn btn-default g btn-info">Save</button>
+          </div>
+          <div class="btn-group">
+            <br>
+            <button id="user-setup-cancel" type="button" class="btn btn-default" (click)="cancelForm()"><i class="fa fa-close"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="showUserAddForm && (isUserManager || isCompanyManager || isStoreManager)" class="row mb-lg clearfix">
+
+        <div *ngIf="isUserManager" class="col-md-2">
+          <label for="user-setup-company">Company</label>
+          <select class="form-control" id="user-setup-company" name="company" formControlName="company" [formControl]="valForm.controls['company']" [(ngModel)]="companyId" (change)="onSelect($event.target.value)">
+            <option *ngFor="let option of companyOptions" [ngValue]="option">{{option.companyName}}</option>
+          </select>
+          <span class="text-danger" *ngIf="valForm.controls['company'].hasError('required') && (valForm.controls['company'].dirty || valForm.controls['company'].touched)">This field is required!</span>
+        </div>  
+
+        <div *ngIf="(isUserManager || isCompanyManager)"class="col-md-2">
+          <label for="user-setup-store">Store</label>
+          <select class="form-control" id="user-setup-store" name="store" formControlName="store" [formControl]="valForm.controls['store']">
+            <option *ngFor="let option of storeOptionsFiltered" [ngValue]="option">{{option.name}}</option>
+          </select>
+          <span class="text-danger" *ngIf="valForm.controls['store'].hasError('required') && (valForm.controls['store'].dirty || valForm.controls['store'].touched)">This field is required!</span>
+        </div>
+
+        <div class="col-md-2">
+          <label for="user-setup-accessLevel">Access Level</label>
+          <select class="form-control" id="user-setup-accessLevel" name="accessLevel" formControlName="accessLevel" [formControl]="valForm.controls['accessLevel']">
+            <option *ngFor="let option of accessLevelOptions" [ngValue]="option">{{option.name}}</option>
+          </select>
+          <span class="text-danger" *ngIf="valForm.controls['accessLevel'].hasError('required') && (valForm.controls['accessLevel'].dirty || valForm.controls['accessLevel'].touched)">This field is required!</span>
+        </div>
+
+        <!--<user-setup-save-cancel></user-setup-save-cancel>-->
+        <div class="col-md-2">
+          <div class="btn-group">
+            <br>
+            <button id="user-setup-save" type="submit" class="btn btn-default g btn-info">Save</button>
+          </div>
+          <div class="btn-group">
+            <br>
+            <button id="user-setup-cancel" type="button" class="btn btn-default" (click)="cancelForm()"><i class="fa fa-close"></i></button>
+          </div>
+        </div>
+      </div>
+      <span class="text-danger" for="btn-group" name="ShowErrorMessage">{{errorMessage}}</span>
+    </div>
+  </fieldset>
+  </form>
+</div>
+
+<div *ngIf="! (showUserEditForm || showUserAddForm)" class="mb-lg clearfix">
+    <div class="wd-md">
+      <input *ngIf="config.filtering" placeholder="Filter all columns" [ngTableFiltering]="config.filtering" class="form-control" (tableChanged)="onChangeTable(config)" />
+    </div>
+</div>
+<div class="panel panel-default">
+    <ng-table [config]="config" (tableChanged)="onChangeTable(config)" (cellClicked)="onCellClick($event)" [rows]="rows" [columns]="columns" [id]="'id'">
+    </ng-table>
+</div>
+<div class="text-right">
+    <pagination *ngIf="config.paging" class="pagination-sm" [(ngModel)]="page" [totalItems]="length" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [boundaryLinks]="true" [rotate]="false" (pageChanged)="onChangeTable(config, $event)" (numPages)="numPages = $event">
+    </pagination>
+</div>

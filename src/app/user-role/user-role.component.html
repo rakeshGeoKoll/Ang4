@@ -1,0 +1,50 @@
+<h1>  
+    {{pageTitle}}
+</h1>
+
+<div class="col-md-12"  >
+    <div class="panel panel-default">
+        <div class="panel-heading">
+        </div>
+        <div class="panel-body">
+             <div class="row" >
+                    <div class="col-xs-2">Id</div>
+                    <div class="col-xs-6">{{UserRole.userId}}</div>
+                </div>
+
+                <hr />
+                <div class="row">
+                    <div class="col-xs-2">UserName</div>
+                    <div class="col-xs-6">
+                        <span>{{UserRole.UserName}}</span>
+                    </div>
+                </div>
+                <hr />
+              
+                <!--<div class="row">
+                    <div class="col-xs-2">Roles</div>
+                    <div class="col-xs-6">
+                 <select #selectedRoleId>
+                    <option *ngFor="let role of roles" [value]="role.roleId">{{role.roleName}}</option>
+                    </select>
+                    </div>
+                </div>-->
+
+                   <div class="row">
+                    <div class="col-xs-2">Roles</div>
+                    <div class="col-xs-6">
+                 <select #selectedRoleId>
+                    <option *ngFor="let role1 of drpRoles" [value]="role1.id">{{role1.name}}</option>
+                    </select>
+                    </div>
+                </div>
+                   
+                <hr />
+                <div class="row">
+                    <div class="col-xs-2">
+                        <button (click)="Update(selectedRoleId.value)">Update</button>
+                    </div>
+                </div>
+        </div>
+     </div>
+</div>
